@@ -8,12 +8,13 @@ def init(args):
         if (args[1] == "help"):
             print_help()
         elif (args[1] == "add"):
-            command = "add"
+            print_default_message("Function is in progress")
+            create_csv_file("notes.csv")
         elif (args[1] == "delete"):
-            command = "delete"
+            print_default_message("Function is in progress")
         elif (args[1] == "edit"):
-            command = "edit"
+            print_default_message("Function is in progress")
         elif (args[1] == "list"):
-            command = "list"
+            print_default_message("Function is in progress")
         else:
             print_error_message(args[1])
