@@ -1,4 +1,5 @@
 from controller import *
 from sys import argv
 
-init(argv)
+if __name__ == "__main__":
+    init(argv)
