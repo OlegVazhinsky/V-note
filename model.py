@@ -11,7 +11,6 @@ def is_file_exists(file_path):
 def create_csv_file(file_path):
     with open(file_path, 'w') as file:
         csv.writer(file)
-    file.close()
 
 def read_note(file_path):
     with open(file_path, 'r') as file:
@@ -23,13 +22,15 @@ def read_note(file_path):
             print("Text = " + note[2])
             print("Time = " + note[3])
             print("Date = " + note[4])
-    file.close()
 
 def write_note(file_path, note):
     if os.stat(file_path).st_size > 0:
         with open(file_path, 'r') as file:
-            id = len(file.readlines()) + 1
-        file.close()
+            reader = csv.reader(file, delimiter=";")
+            id = 1
+            for item in reader:
+                if int(item[0]) > id:
+                    id = int(item[0]) + 1
     else:
         id = 1
     with open(file_path, 'a', newline='') as file:
@@ -50,7 +51,33 @@ def write_note(file_path, note):
         result_note.append(datetime.datetime.now().strftime("%H:%M:%S"))
         result_note.append(datetime.date.today().strftime("%d %b %Y"))
         writer.writerow(result_note)
-    file.close()
+
+def delete_note(file_path, args):
+    if args[3].isdigit():
+        id = int(args[3])
+    else:
+        return False
+    flag = False
+    with open(file_path, 'r') as file_read:
+        reader = csv.reader(file_read, delimiter=";")
+        for note in reader:
+            if int(note[0]) == id:
+                flag = True
+    notes = []
+    with open(file_path, 'r') as file_read:
+        reader = csv.reader(file_read, delimiter=";")
+        for note in reader:
+            if int(note[0]) != id:
+                notes.append(note)
+    if flag == True:
+        create_csv_file(file_path)
+        with open(file_path, 'a', newline='') as file:
+            writer = csv.writer(file, delimiter=";")
+            for note in notes:
+                writer.writerow(note)
+        return True
+    else:
+        return False
 
 def is_add_command_ok(args):
     result_dict = {}
@@ -59,8 +86,23 @@ def is_add_command_ok(args):
             if c == args[i]:
                 result_dict[c] = i
                 break
-    if result_dict["add"] == 1 and result_dict["-title"] == 2 and result_dict["-text"] > 3:
-        return True
+    if len(result_dict) == 3:
+        if result_dict["add"] == 1 and result_dict["-title"] == 2 and result_dict["-text"] > 3:
+            return True
     else:
         return False
-
+    
+def is_delete_command_ok(args):
+    result_dict = {}
+    for c in ["delete","-id"]:
+        for i in range(len(args)):
+            if c == args[i]:
+                result_dict[c] = i
+                break
+    if len(result_dict) == 2:
+        if result_dict["delete"] == 1 and result_dict["-id"] == 2 and len(args) == 4:
+            return True
+        else:
+            return False
+    else:
+        return False
