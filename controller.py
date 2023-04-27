@@ -16,8 +16,13 @@ def init(args):
             else:
                 print_command_error("add")
         elif (args[1] == "delete"):
-            if not is_file_exists("notes.csv"):
-                print_action_error("delete")
+            if is_delete_command_ok(args):
+                if delete_note("notes.csv", args):
+                    print_default_message("Note successfully deleted.")
+                else:
+                    print_command_error("delete")
+            else:
+                print_command_error("delete")
         elif (args[1] == "edit"):
             print_default_message("Function is in progress")
         elif (args[1] == "list"):
