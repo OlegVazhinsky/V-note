@@ -24,7 +24,13 @@ def init(args):
             else:
                 print_command_error("delete")
         elif (args[1] == "edit"):
-            print_default_message("Function is in progress")
+            if is_edit_command_ok(args):
+                if edit_note("notes.csv", args):
+                    print_default_message("Note successfully edited.")
+                else:
+                    print_command_error("edit")
+            else:
+                print_command_error("edit")
         elif (args[1] == "list"):
             if not is_file_exists("notes.csv"):
                 print_action_error("see")
