@@ -112,7 +112,7 @@ def edit_note(file_path, args):
                 result_note.append(text)
                 result_note.append(datetime.datetime.now().strftime("%H:%M:%S"))
                 result_note.append(datetime.date.today().strftime("%d %b %Y"))
-                notes.append(note)
+                notes.append(result_note)
     if flag == True:
         create_csv_file(file_path)
         with open(file_path, 'a', newline='') as file:
