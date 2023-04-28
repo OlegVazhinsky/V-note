@@ -1,28 +1,30 @@
+# standard imports.
 import os.path
 import csv
 import datetime
 
+# check if file exists. return True if the file exists. False otherwise.
 def is_file_exists(file_path):
     if (not os.path.exists(file_path)):
         return False
     else:
         return True
 
+# creates file.
 def create_csv_file(file_path):
     with open(file_path, 'w') as file:
         csv.writer(file)
 
+# read notes. returns the list of notes.
 def read_note(file_path):
+    notes = []
     with open(file_path, 'r') as file:
         reader = csv.reader(file, delimiter=";")
         for note in reader:
-            print("_________________")
-            print("ID = " + note[0])
-            print("Title = " + note[1])
-            print("Text = " + note[2])
-            print("Time = " + note[3])
-            print("Date = " + note[4])
+            notes.append(note)
+    return notes
 
+# writes note to the file.
 def write_note(file_path, note):
     if os.stat(file_path).st_size > 0:
         with open(file_path, 'r') as file:
@@ -43,15 +45,18 @@ def write_note(file_path, note):
         title = ""
         for i in range(3, index):
             title = title + note[i] + " "
+        title = title[:-1]
         text = ""
         for i in range(index + 1, len(note)):
             text = text + note[i] + " "
+        text = text[:-1]
         result_note.append(title)
         result_note.append(text)
         result_note.append(datetime.datetime.now().strftime("%H:%M:%S"))
         result_note.append(datetime.date.today().strftime("%d %b %Y"))
         writer.writerow(result_note)
 
+# deletes the note. Returns True if success. False otherwise.
 def delete_note(file_path, args):
     if args[3].isdigit():
         id = int(args[3])
@@ -79,6 +84,7 @@ def delete_note(file_path, args):
     else:
         return False
 
+# edites the note. Returns True if success. False otherwise.
 def edit_note(file_path, args):
     if args[3].isdigit():
         id = int(args[3])
@@ -105,9 +111,11 @@ def edit_note(file_path, args):
                 title = ""
                 for i in range(5, index):
                     title = title + args[i] + " "
+                title = title[:-1]
                 text = ""
                 for i in range(index + 1, len(args)):
                     text = text + args[i] + " "
+                text = text[:-1]
                 result_note.append(title)
                 result_note.append(text)
                 result_note.append(datetime.datetime.now().strftime("%H:%M:%S"))
@@ -123,6 +131,7 @@ def edit_note(file_path, args):
     else:
         return False
 
+# checks if user wrote "add" command correctly. Returns True if success. False otherwise.
 def is_add_command_ok(args):
     result_dict = {}
     for c in ["add","-title","-text"]:
@@ -136,6 +145,7 @@ def is_add_command_ok(args):
     else:
         return False
     
+# checks if user wrote "delete" command correctly. Returns True if success. False otherwise.
 def is_delete_command_ok(args):
     result_dict = {}
     for c in ["delete","-id"]:
@@ -151,6 +161,7 @@ def is_delete_command_ok(args):
     else:
         return False
     
+# checks if user wrote "edit" command correctly. Returns True if success. False otherwise.
 def is_edit_command_ok(args):
     result_dict = {}
     for c in ["edit","-id","-title","-text"]:
