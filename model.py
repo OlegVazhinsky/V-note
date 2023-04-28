@@ -79,6 +79,50 @@ def delete_note(file_path, args):
     else:
         return False
 
+def edit_note(file_path, args):
+    if args[3].isdigit():
+        id = int(args[3])
+    else:
+        return False
+    flag = False
+    with open(file_path, 'r') as file_read:
+        reader = csv.reader(file_read, delimiter=";")
+        for note in reader:
+            if int(note[0]) == id:
+                flag = True
+    notes = []
+    with open(file_path, 'r') as file_read:
+        reader = csv.reader(file_read, delimiter=";")
+        for note in reader:
+            if int(note[0]) != id:
+                notes.append(note)
+            else:
+                for i in range(len(args)):
+                    if args[i] == "-text":
+                        index = i
+                result_note = []
+                result_note.append(id)
+                title = ""
+                for i in range(5, index):
+                    title = title + args[i] + " "
+                text = ""
+                for i in range(index + 1, len(args)):
+                    text = text + args[i] + " "
+                result_note.append(title)
+                result_note.append(text)
+                result_note.append(datetime.datetime.now().strftime("%H:%M:%S"))
+                result_note.append(datetime.date.today().strftime("%d %b %Y"))
+                notes.append(note)
+    if flag == True:
+        create_csv_file(file_path)
+        with open(file_path, 'a', newline='') as file:
+            writer = csv.writer(file, delimiter=";")
+            for note in notes:
+                writer.writerow(note)
+        return True
+    else:
+        return False
+
 def is_add_command_ok(args):
     result_dict = {}
     for c in ["add","-title","-text"]:
