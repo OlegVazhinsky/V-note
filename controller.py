@@ -46,7 +46,9 @@ def init(args):
             if not is_file_exists("notes.csv"):
                 print_action_error()
             else:
-                read_note("notes.csv")
+                notes = read_note("notes.csv")
+                for note in notes:
+                    print_note(note)
         # can not identify the command
         else:
             print_error_message(args[1])
