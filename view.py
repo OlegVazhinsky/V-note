@@ -26,3 +26,11 @@ def print_default_message(message):
 def print_command_error(command):
     print("Something went wrong with command '" + command + "'.")
     print("Please, check youself and try again.")
+
+def print_note(note):
+    print("_________________")
+    print("ID = " + note[0])
+    print("Title = " + note[1])
+    print("Text = " + note[2])
+    print("Time = " + note[3])
+    print("Date = " + note[4])
