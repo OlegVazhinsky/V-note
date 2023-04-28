@@ -106,3 +106,18 @@ def is_delete_command_ok(args):
             return False
     else:
         return False
+    
+def is_edit_command_ok(args):
+    result_dict = {}
+    for c in ["edit","-id","-title","-text"]:
+        for i in range(len(args)):
+            if c == args[i]:
+                result_dict[c] = i
+                break
+    if len(result_dict) == 4:
+        if result_dict["edit"] == 1 and result_dict["-id"] == 2 and result_dict["-title"] == 4 and result_dict["-text"] > 5:
+            return True
+        else:
+            return False
+    else:
+        return False
